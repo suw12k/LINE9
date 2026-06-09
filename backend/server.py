@@ -231,9 +231,12 @@ async def resend_quote(quote_id: str):
     try:
         # Recreate a QuoteRequest model from stored data for HTML generation
         qreq = QuoteRequest(**qdata)
+        # Send only to the client email for local/testing keys to avoid
+        # test-key restrictions that only allow the owner's email.
+        to_list = [client_email]
         params = {
             "from": "LINE9 <onboarding@resend.dev>",
-            "to": [client_email, QUOTE_RECIPIENT_EMAIL],
+            "to": to_list,
             "reply_to": QUOTE_RECIPIENT_EMAIL,
             "subject": f"[LINE9] Devis — {qdata.get('full_name', '')}",
             "html": _build_email_html(qreq, quote_id),
