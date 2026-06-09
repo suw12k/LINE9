@@ -244,14 +244,20 @@ async def resend_quote(quote_id: str):
         resp = resend.Emails.send(params)
         logger.info(f"Resend resend response: {resp}")
 
-        # Update stored quote status
-        await db.quotes.update_one({"id": quote_id}, {"$set": {"email_sent": True, "email_error": None}})
+        # Update stored quote status (don't fail the request if DB is down)
+        try:
+            await db.quotes.update_one({"id": quote_id}, {"$set": {"email_sent": True, "email_error": None}})
+        except Exception as e:
+            logger.warning(f"Mongo update after resend failed: {e}")
 
         return {"id": quote_id, "email_sent": True, "message": "Devis renvoyé avec succès."}
     except Exception as e:
         err = str(e)
         logger.error(f"Resend resend failed: {err}")
-        await db.quotes.update_one({"id": quote_id}, {"$set": {"email_error": err}})
+        try:
+            await db.quotes.update_one({"id": quote_id}, {"$set": {"email_error": err}})
+        except Exception as e2:
+            logger.warning(f"Mongo update of error failed: {e2}")
         raise HTTPException(status_code=500, detail=f"Échec de l'envoi: {err}")
 
 
