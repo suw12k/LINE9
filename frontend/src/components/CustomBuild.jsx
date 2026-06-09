@@ -118,7 +118,7 @@ const CustomBuild = () => {
                   {reco.desc}
                 </div>
                 <Link
-                  to="/custom"
+                  to="/devis"
                   className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-[#C7F84E] text-[#0F0F0F] text-[13px] font-bold py-3 rounded-full hover:brightness-95 transition-[filter]"
                 >
                   Demander un devis gratuit

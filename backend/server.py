@@ -1,14 +1,15 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, HTTPException
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from pydantic import BaseModel, Field, EmailStr
+from typing import List, Optional
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime
+import resend
 
 
 ROOT_DIR = Path(__file__).parent
@@ -19,6 +20,12 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Resend setup
+RESEND_API_KEY = os.environ.get('RESEND_API_KEY', '')
+QUOTE_RECIPIENT_EMAIL = os.environ.get('QUOTE_RECIPIENT_EMAIL', 'laszlochomel@gmail.com')
+if RESEND_API_KEY:
+    resend.api_key = RESEND_API_KEY
+
 # Create the main app without a prefix
 app = FastAPI()
 
@@ -26,45 +33,167 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 
-# Define Models
+# ========== Models ==========
 class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+
 
 class StatusCheckCreate(BaseModel):
     client_name: str
 
-# Add your routes to the router instead of directly to app
+
+class QuoteRequest(BaseModel):
+    full_name: str = Field(..., min_length=2, max_length=120)
+    email: EmailStr
+    phone: str = Field(..., min_length=4, max_length=30)
+    country: str = Field(..., min_length=2, max_length=80)
+    need: str = Field(..., min_length=2, max_length=200)
+    budget: str = Field(..., min_length=1, max_length=80)
+    usage: str = Field(..., min_length=2, max_length=500)
+    package: str
+    wireless: str
+    color: str
+    resolution: str
+    case_type: str
+    rgb: str
+    win_edition: str
+    message: str = Field(..., min_length=2, max_length=4000)
+    over_18: str
+    cgv_accepted: bool
+
+
+class QuoteStored(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    data: dict
+    email_sent: bool = False
+    email_error: Optional[str] = None
+
+
+# ========== Routes ==========
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "LINE9 API ready"}
+
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
+    status_dict = input.dict()
     status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
+    _ = await db.status_checks.insert_one(status_obj.dict())
     return status_obj
+
 
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+    status_checks = await db.status_checks.find().to_list(1000)
+    return [StatusCheck(**status_check) for status_check in status_checks]
+
+
+def _build_email_html(q: QuoteRequest, quote_id: str) -> str:
+    rows = [
+        ("Nom et Prénom", q.full_name),
+        ("Email", q.email),
+        ("Téléphone", q.phone),
+        ("Pays", q.country),
+        ("Besoin", q.need),
+        ("Budget", q.budget),
+        ("Usage", q.usage),
+        ("Forfait assemblage", q.package),
+        ("Connectivité sans-fil", q.wireless),
+        ("Couleur", q.color),
+        ("Résolution cible", q.resolution),
+        ("Boitier", q.case_type),
+        ("RGB", q.rgb),
+        ("Édition Win11", q.win_edition),
+        ("Plus de 18 ans", q.over_18),
+        ("CGV acceptées", "Oui" if q.cgv_accepted else "Non"),
+    ]
+    rows_html = "".join(
+        f"<tr><td style='padding:10px 14px;border-bottom:1px solid #1a1a1a;color:#888;font-size:13px;width:200px;'>{label}</td>"
+        f"<td style='padding:10px 14px;border-bottom:1px solid #1a1a1a;color:#fff;font-size:14px;font-weight:500;'>{value}</td></tr>"
+        for label, value in rows
+    )
+    return f"""
+    <div style="font-family:Inter,Arial,sans-serif;background:#0F0F0F;color:#fff;padding:24px;">
+      <div style="max-width:640px;margin:0 auto;background:#141414;border-radius:18px;overflow:hidden;border:1px solid #222;">
+        <div style="background:#C7F84E;color:#0F0F0F;padding:24px 28px;">
+          <div style="font-size:11px;letter-spacing:0.22em;font-weight:700;text-transform:uppercase;">LINE9 · Nouveau devis</div>
+          <div style="font-size:24px;font-weight:900;margin-top:6px;">Demande de devis #{quote_id[:8]}</div>
+        </div>
+        <table style="width:100%;border-collapse:collapse;">
+          {rows_html}
+        </table>
+        <div style="padding:20px 28px;background:#0F0F0F;border-top:1px solid #1a1a1a;">
+          <div style="color:#888;font-size:12px;margin-bottom:8px;">Message du client</div>
+          <div style="color:#fff;font-size:14px;line-height:1.5;white-space:pre-wrap;">{q.message}</div>
+        </div>
+        <div style="padding:16px 28px;background:#0a0a0a;color:#555;font-size:11px;text-align:center;">
+          Reçu le {datetime.utcnow().strftime('%d/%m/%Y à %H:%M UTC')} · ID {quote_id}
+        </div>
+      </div>
+    </div>
+    """
+
+
+@api_router.post("/quote")
+async def create_quote(payload: QuoteRequest):
+    if not payload.cgv_accepted:
+        raise HTTPException(status_code=400, detail="Vous devez accepter les CGV.")
+
+    quote_id = str(uuid.uuid4())
+    stored = {
+        "id": quote_id,
+        "created_at": datetime.utcnow(),
+        "data": payload.dict(),
+        "email_sent": False,
+        "email_error": None,
+    }
+
+    # Try to send email via Resend
+    email_error = None
+    email_sent = False
+    if RESEND_API_KEY:
+        try:
+            params = {
+                "from": "LINE9 <onboarding@resend.dev>",
+                "to": [QUOTE_RECIPIENT_EMAIL],
+                "reply_to": payload.email,
+                "subject": f"[LINE9] Nouveau devis — {payload.full_name}",
+                "html": _build_email_html(payload, quote_id),
+            }
+            resp = resend.Emails.send(params)
+            logger.info(f"Resend response: {resp}")
+            email_sent = True
+        except Exception as e:
+            email_error = str(e)
+            logger.error(f"Resend send failed: {e}")
+    else:
+        email_error = "RESEND_API_KEY missing"
+
+    stored["email_sent"] = email_sent
+    stored["email_error"] = email_error
+
+    # Persist in MongoDB (always)
+    try:
+        await db.quotes.insert_one(stored)
+    except Exception as e:
+        logger.error(f"Mongo insert failed: {e}")
+
+    return {
+        "id": quote_id,
+        "email_sent": email_sent,
+        "message": "Votre demande a bien été enregistrée. Vous recevrez une réponse sous 24h.",
+    }
+
+
+@api_router.get("/quotes/count")
+async def quotes_count():
+    n = await db.quotes.count_documents({})
+    return {"count": n}
+
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -72,7 +201,7 @@ app.include_router(api_router)
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -83,6 +212,7 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
 
 @app.on_event("shutdown")
 async def shutdown_db_client():

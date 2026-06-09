@@ -66,7 +66,7 @@ const Header = () => {
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#C7F84E] rounded-full border-2 border-[#FAFAF7]" />
             </button>
             <Link
-              to="/custom"
+              to="/devis"
               className="hidden md:inline-flex items-center gap-2 ml-2 bg-[#0F0F0F] text-white text-[13px] font-semibold px-5 py-2.5 rounded-full hover:bg-[#0F0F0F]/85 transition-colors duration-200"
             >
               Devis gratuit
@@ -101,7 +101,7 @@ const Header = () => {
             </Link>
           ))}
           <Link
-            to="/custom"
+            to="/devis"
             className="mt-4 inline-flex items-center justify-center gap-2 bg-[#0F0F0F] text-white text-sm font-semibold px-5 py-3 rounded-full"
           >
             Devis gratuit

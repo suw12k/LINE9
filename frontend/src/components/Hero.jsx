@@ -74,7 +74,7 @@ const Hero = () => {
                 </span>
               </Link>
               <Link
-                to="/custom"
+                to="/devis"
                 className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#0F0F0F] px-6 py-3 rounded-full border border-[#0F0F0F]/15 hover:border-[#0F0F0F] transition-colors duration-200"
               >
                 Configurateur sur mesure
