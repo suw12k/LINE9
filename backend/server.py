@@ -195,6 +195,45 @@ async def quotes_count():
     return {"count": n}
 
 
+@api_router.post("/quote/{quote_id}/resend")
+async def resend_quote(quote_id: str):
+    quote = await db.quotes.find_one({"id": quote_id})
+    if not quote:
+        raise HTTPException(status_code=404, detail="Devis introuvable")
+
+    # Ensure Resend is configured
+    if not RESEND_API_KEY:
+        raise HTTPException(status_code=500, detail="RESEND_API_KEY missing")
+
+    qdata = quote.get("data", {})
+    client_email = qdata.get("email")
+    if not client_email:
+        raise HTTPException(status_code=400, detail="Le devis ne contient pas d'email client")
+
+    try:
+        # Recreate a QuoteRequest model from stored data for HTML generation
+        qreq = QuoteRequest(**qdata)
+        params = {
+            "from": "LINE9 <onboarding@resend.dev>",
+            "to": [client_email, QUOTE_RECIPIENT_EMAIL],
+            "reply_to": QUOTE_RECIPIENT_EMAIL,
+            "subject": f"[LINE9] Devis — {qdata.get('full_name', '')}",
+            "html": _build_email_html(qreq, quote_id),
+        }
+        resp = resend.Emails.send(params)
+        logger.info(f"Resend resend response: {resp}")
+
+        # Update stored quote status
+        await db.quotes.update_one({"id": quote_id}, {"$set": {"email_sent": True, "email_error": None}})
+
+        return {"id": quote_id, "email_sent": True, "message": "Devis renvoyé avec succès."}
+    except Exception as e:
+        err = str(e)
+        logger.error(f"Resend resend failed: {err}")
+        await db.quotes.update_one({"id": quote_id}, {"$set": {"email_error": err}})
+        raise HTTPException(status_code=500, detail=f"Échec de l'envoi: {err}")
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
