@@ -167,6 +167,7 @@ export const stats = [
 
 export const navItems = [
   { label: "Accueil", href: "/" },
+  { label: "PC sur mesure", href: "/pc-sur-mesure" },
   { label: "Configs", href: "/configs" },
   { label: "Devis", href: "/devis" }
 ];
