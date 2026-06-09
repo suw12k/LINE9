@@ -26,6 +26,9 @@ QUOTE_RECIPIENT_EMAIL = os.environ.get('QUOTE_RECIPIENT_EMAIL', 'laszlochomel@gm
 if RESEND_API_KEY:
     resend.api_key = RESEND_API_KEY
 
+# In-memory cache for quotes to allow resend when Mongo is unavailable (local testing)
+QUOTE_CACHE = {}
+
 # Create the main app without a prefix
 app = FastAPI()
 
@@ -152,6 +155,12 @@ async def create_quote(payload: QuoteRequest):
         "email_error": None,
     }
 
+    # Cache the quote in memory so it can be resent even if Mongo is down (dev only)
+    try:
+        QUOTE_CACHE[quote_id] = stored
+    except Exception:
+        pass
+
     # Try to send email via Resend
     email_error = None
     email_sent = False
@@ -197,7 +206,16 @@ async def quotes_count():
 
 @api_router.post("/quote/{quote_id}/resend")
 async def resend_quote(quote_id: str):
-    quote = await db.quotes.find_one({"id": quote_id})
+    quote = None
+    # Try to read from MongoDB but fall back to in-memory cache if DB is unreachable
+    try:
+        quote = await db.quotes.find_one({"id": quote_id})
+    except Exception as e:
+        logger.warning(f"Mongo read failed, falling back to cache: {e}")
+
+    if not quote:
+        quote = QUOTE_CACHE.get(quote_id)
+
     if not quote:
         raise HTTPException(status_code=404, detail="Devis introuvable")
 
