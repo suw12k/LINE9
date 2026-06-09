@@ -83,7 +83,7 @@ const Footer = () => {
               </div>
             </Link>
             <p className="text-white/55 text-[14px] leading-relaxed max-w-sm">
-              Assembleur indépendant de PC sur mesure, montés à la main en Normandie. Builds testés, validés, livrés.
+              LINE9 c&apos;est <span className="text-white font-semibold">Laszlo</span>, assembleur indépendant de PC sur mesure, montés à la main en Île-de-France. Builds testés, validés, livrés.
             </p>
             <div className="flex items-center gap-3 mt-6">
               {[Instagram, Youtube, Twitter].map((Icon, i) => (

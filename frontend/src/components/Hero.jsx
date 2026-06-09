@@ -44,7 +44,7 @@ const Hero = () => {
             En ligne · {time}
           </div>
           <div className="hidden sm:block">Édition 026 — Hiver 2026</div>
-          <div className="hidden md:block">Normandie, FR</div>
+          <div className="hidden md:block">Île-de-France · Par Laszlo</div>
         </div>
 
         {/* Big headline */}
@@ -86,11 +86,7 @@ const Hero = () => {
           {/* Right column: tagline + featured card */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             <p className="text-[15px] leading-relaxed text-[#0F0F0F]/70 max-w-md">
-              LINE9 assemble des configurations premium à la main,
-              testées 72h, livrées partout en France. Une philosophie simple :{" "}
-              <span className="text-[#0F0F0F] font-semibold">
-                aucune concession.
-              </span>
+              Moi c&apos;est <span className="text-[#0F0F0F] font-semibold">Laszlo</span> et je monte des configurations premium à la main, en Île-de-France, testées 72h. Une philosophie simple : <span className="text-[#0F0F0F] font-semibold">aucune concession.</span>
             </p>
 
             <div className="relative rounded-3xl bg-[#0F0F0F] text-white p-6 overflow-hidden">

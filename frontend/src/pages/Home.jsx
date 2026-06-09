@@ -10,7 +10,7 @@ import Footer, { Newsletter } from "../components/Footer";
 
 const MarqueeBand = () => {
   const items = [
-    "Assemblé à la main en Normandie",
+    "Assemblé à la main en Île-de-France",
     "Devis gratuit sous 24h",
     "Test stabilité 72h",
     "Garantie 2 ans",
