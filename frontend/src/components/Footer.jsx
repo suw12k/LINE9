@@ -83,7 +83,7 @@ const Footer = () => {
               </div>
             </Link>
             <p className="text-white/55 text-[14px] leading-relaxed max-w-sm">
-              Constructeur indépendant de PC premium assemblés à la main en Normandie. Livraison France & UE.
+              Assembleur indépendant de PC sur mesure, montés à la main en Normandie. Builds testés, validés, livrés.
             </p>
             <div className="flex items-center gap-3 mt-6">
               {[Instagram, Youtube, Twitter].map((Icon, i) => (
@@ -95,7 +95,7 @@ const Footer = () => {
           </div>
 
           {[
-            { title: "Boutique", links: ["PC RTX 5090", "PC RTX 5080", "PC AMD", "Périphériques"] },
+            { title: "Réalisations", links: ["Tous les builds", "Builds blanc", "Builds RGB", "Watercooling"] },
             { title: "Services", links: ["Montage Custom", "Dépannage", "Cybersécurité", "Impression 3D"] },
             { title: "Entreprise", links: ["À propos", "Avis clients", "Contact", "Mentions légales"] }
           ].map((col) => (

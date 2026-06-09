@@ -8,12 +8,12 @@ const CustomBuild = () => {
   const usages = ["Gaming", "Création", "Bureautique", "Streaming"];
 
   const reco = budget < 1200
-    ? { name: "NEXUS COBALT", gpu: "RX 9060 XT", cpu: "Ryzen 5 7500F" }
+    ? { name: "CONFIG ESSENTIELLE", desc: "Bon GPU milieu de gamme · CPU 6 cœurs" }
     : budget < 2000
-      ? { name: "NEXUS NEBULA", gpu: "RX 9070 XT", cpu: "Ryzen 5 7500F" }
+      ? { name: "CONFIG ÉQUILIBRÉE", desc: "GPU performant · CPU récent · DDR5" }
       : budget < 3000
-        ? { name: "NEXUS DARK", gpu: "RTX 5070 Ti", cpu: "Ryzen 7 7800X3D" }
-        : { name: "NEXUS APEX", gpu: "RTX 5090", cpu: "Ryzen 9 9950X3D" };
+        ? { name: "CONFIG HAUT DE GAMME", desc: "GPU enthusiast · CPU X3D · 32Go DDR5" }
+        : { name: "CONFIG EXTRÊME", desc: "Le top du top, sans concession" };
 
   return (
     <section id="custom" className="py-24 lg:py-32 relative overflow-hidden">
@@ -111,11 +111,11 @@ const CustomBuild = () => {
               {/* Reco */}
               <div className="mt-8 p-5 bg-[#0F0F0F] rounded-2xl text-white">
                 <div className="text-[10px] tracking-[0.22em] uppercase text-[#C7F84E] font-bold">
-                  Notre suggestion
+                  Pour vous
                 </div>
                 <div className="text-xl font-black mt-1.5">{reco.name}</div>
                 <div className="text-white/55 text-[12px] mt-1">
-                  {reco.gpu} · {reco.cpu}
+                  {reco.desc}
                 </div>
                 <Link
                   to="/custom"

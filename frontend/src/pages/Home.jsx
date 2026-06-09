@@ -10,10 +10,10 @@ import Footer, { Newsletter } from "../components/Footer";
 
 const MarqueeBand = () => {
   const items = [
-    "Livraison offerte dès 1500€",
-    "Garantie 2 ans",
     "Assemblé à la main en Normandie",
+    "Devis gratuit sous 24h",
     "Test stabilité 72h",
+    "Garantie 2 ans",
     "Service client 7j/7",
     "+160 avis 5/5"
   ];
