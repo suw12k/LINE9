@@ -1,0 +1,81 @@
+/* NEXUS Hardware - Global App Styles */
+
+.App {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headlines font */
+h1, h2, h3, h4, h5 {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Italic style override using serif for editorial touch */
+.italic, em, i {
+  font-family: 'Instrument Serif', 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+/* Custom range slider */
+.nexus-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #E8E8E4;
+  border-radius: 999px;
+  outline: none;
+}
+.nexus-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: #0F0F0F;
+  border: 4px solid #C7F84E;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.nexus-range::-webkit-slider-thumb:hover { transform: scale(1.1); }
+.nexus-range::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  background: #0F0F0F;
+  border: 4px solid #C7F84E;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+/* Marquee */
+@keyframes nexus-marquee-anim {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.nexus-marquee {
+  animation: nexus-marquee-anim 35s linear infinite;
+  width: max-content;
+}
+
+/* Testimonial fade-in */
+@keyframes testimonial-fade-anim {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.testimonial-fade {
+  animation: testimonial-fade-anim 0.5s ease-out;
+}
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Subtle scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #FAFAF7; }
+::-webkit-scrollbar-thumb { background: #0F0F0F33; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #0F0F0F66; }
