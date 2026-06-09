@@ -78,9 +78,23 @@ const Devis = () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err) {
       const detail = err?.response?.data?.detail;
+      let desc = "Veuillez réessayer dans un instant.";
+      if (typeof detail === "string") {
+        desc = detail;
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        // Pydantic validation errors
+        const fields = detail
+          .map((d) => {
+            const field = Array.isArray(d.loc) ? d.loc[d.loc.length - 1] : "champ";
+            return `${field}: ${d.msg}`;
+          })
+          .slice(0, 3)
+          .join(" · ");
+        desc = `Champs invalides — ${fields}`;
+      }
       toast({
         title: "Erreur d'envoi",
-        description: typeof detail === "string" ? detail : "Veuillez réessayer dans un instant.",
+        description: desc,
       });
     } finally {
       setLoading(false);

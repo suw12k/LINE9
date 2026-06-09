@@ -47,20 +47,20 @@ class StatusCheckCreate(BaseModel):
 class QuoteRequest(BaseModel):
     full_name: str = Field(..., min_length=2, max_length=120)
     email: EmailStr
-    phone: str = Field(..., min_length=4, max_length=30)
+    phone: str = Field(..., min_length=3, max_length=40)
     country: str = Field(..., min_length=2, max_length=80)
-    need: str = Field(..., min_length=2, max_length=200)
+    need: str = Field(..., min_length=2, max_length=300)
     budget: str = Field(..., min_length=1, max_length=80)
-    usage: str = Field(..., min_length=2, max_length=500)
-    package: str
-    wireless: str
-    color: str
-    resolution: str
-    case_type: str
-    rgb: str
-    win_edition: str
-    message: str = Field(..., min_length=2, max_length=4000)
-    over_18: str
+    usage: str = Field(..., min_length=2, max_length=2000)
+    package: str = Field(..., min_length=1)
+    wireless: str = Field(..., min_length=1)
+    color: str = Field(..., min_length=1)
+    resolution: str = Field(..., min_length=1)
+    case_type: str = Field(..., min_length=1)
+    rgb: str = Field(..., min_length=1)
+    win_edition: str = Field(..., min_length=1)
+    message: str = Field(..., min_length=2, max_length=5000)
+    over_18: str = Field(..., min_length=1)
     cgv_accepted: bool
 
 
