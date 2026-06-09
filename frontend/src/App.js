@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Devis from "./pages/Devis";
 import Configs from "./pages/Configs";
 import { Toaster } from "./components/ui/toaster";
+import CookieBanner from "./components/CookieBanner";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         </Routes>
       </BrowserRouter>
       <Toaster />
+      <CookieBanner />
     </div>
   );
 }

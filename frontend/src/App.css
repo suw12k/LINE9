@@ -71,6 +71,15 @@ h1, h2, h3, h4, h5 {
   animation: testimonial-fade-anim 0.5s ease-out;
 }
 
+/* Cookie banner slide-up */
+@keyframes cookie-banner-anim {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.cookie-banner-anim {
+  animation: cookie-banner-anim 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 /* Hide Emergent badge */
 #emergent-badge {
   display: none !important;
