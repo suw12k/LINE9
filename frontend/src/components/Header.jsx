@@ -32,12 +32,12 @@ const Header = () => {
           <Link to="/" className="flex items-center gap-2 group">
             <div className="relative">
               <div className="w-9 h-9 bg-[#0F0F0F] rounded-[10px] flex items-center justify-center transition-transform duration-300 group-hover:rotate-[8deg]">
-                <span className="text-[#C7F84E] font-black text-lg leading-none">N</span>
+                <span className="text-[#C7F84E] font-black text-lg leading-none">L9</span>
               </div>
               <div className="absolute -inset-1 bg-[#C7F84E] rounded-[12px] opacity-0 group-hover:opacity-20 blur-md transition-opacity duration-300" />
             </div>
             <div className="flex flex-col leading-none">
-              <span className="font-black text-[#0F0F0F] text-[17px] tracking-tight">NEXUS</span>
+              <span className="font-black text-[#0F0F0F] text-[17px] tracking-tight">LINE9</span>
               <span className="text-[10px] text-[#666] tracking-[0.18em] font-medium uppercase mt-0.5">Hardware</span>
             </div>
           </Link>

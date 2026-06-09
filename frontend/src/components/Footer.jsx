@@ -75,10 +75,10 @@ const Footer = () => {
           <div className="col-span-2">
             <Link to="/" className="flex items-center gap-2 mb-6">
               <div className="w-10 h-10 bg-[#C7F84E] rounded-[10px] flex items-center justify-center">
-                <span className="text-[#0F0F0F] font-black text-lg leading-none">N</span>
+                <span className="text-[#0F0F0F] font-black text-lg leading-none">L9</span>
               </div>
               <div className="flex flex-col leading-none">
-                <span className="font-black text-[17px]">NEXUS</span>
+                <span className="font-black text-[17px]">LINE9</span>
                 <span className="text-[10px] text-white/55 tracking-[0.18em] mt-0.5">HARDWARE</span>
               </div>
             </Link>
@@ -111,7 +111,7 @@ const Footer = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-[12px] text-white/45">
-          <div>© 2026 NEXUS Hardware. Tous droits réservés.</div>
+          <div>© 2026 LINE9. Tous droits réservés.</div>
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-white">CGV</a>
             <a href="#" className="hover:text-white">Confidentialité</a>

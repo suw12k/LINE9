@@ -86,7 +86,7 @@ const Hero = () => {
           {/* Right column: tagline + featured card */}
           <div className="lg:col-span-4 flex flex-col gap-6">
             <p className="text-[15px] leading-relaxed text-[#0F0F0F]/70 max-w-md">
-              NEXUS Hardware assemble des configurations premium à la main,
+              LINE9 assemble des configurations premium à la main,
               testées 72h, livrées partout en France. Une philosophie simple :{" "}
               <span className="text-[#0F0F0F] font-semibold">
                 aucune concession.
