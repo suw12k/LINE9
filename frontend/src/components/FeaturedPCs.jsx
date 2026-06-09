@@ -14,8 +14,8 @@ const PCCard = ({ pc, index }) => {
           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
         />
         <div
-          className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] tracking-[0.16em] font-bold uppercase"
-          style={{ backgroundColor: pc.color, color: "#0F0F0F" }}
+          className="absolute top-4 left-4 px-2.5 py-1 rounded-md text-[10px] tracking-[0.12em] font-semibold uppercase shadow-sm"
+          style={{ backgroundColor: 'rgba(0,0,0,0.6)', color: "#FFFFFF" }}
         >
           {pc.tag}
         </div>
