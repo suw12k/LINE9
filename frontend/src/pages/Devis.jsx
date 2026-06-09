@@ -53,6 +53,8 @@ const Devis = () => {
   const [form, setForm] = useState(initial);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [lastQuoteId, setLastQuoteId] = useState(null);
+  const [resendLoading, setResendLoading] = useState(false);
   const { toast } = useToast();
 
   const set = (k) => (e) => {
@@ -69,6 +71,7 @@ const Devis = () => {
     setLoading(true);
     try {
       const { data } = await axios.post(`${API}/quote`, form);
+      setLastQuoteId(data.id || null);
       setSuccess(true);
       toast({
         title: "Demande envoyée !",
@@ -84,6 +87,23 @@ const Devis = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const onResend = async () => {
+    if (!lastQuoteId) {
+      toast({ title: "ID manquant", description: "Aucun identifiant de devis disponible." });
+      return;
+    }
+    setResendLoading(true);
+    try {
+      const { data } = await axios.post(`${API}/quote/${lastQuoteId}/resend`);
+      toast({ title: "Devis renvoyé", description: data.message || "Le devis a été renvoyé." });
+    } catch (err) {
+      const detail = err?.response?.data?.detail;
+      toast({ title: "Échec du renvoi", description: typeof detail === "string" ? detail : "Veuillez réessayer." });
+    } finally {
+      setResendLoading(false);
     }
   };
 
@@ -133,6 +153,13 @@ const Devis = () => {
                   className="px-5 py-3 rounded-full border border-black/15 text-[13px] font-semibold hover:border-black transition-colors"
                 >
                   Envoyer une autre demande
+                </button>
+                <button
+                  onClick={onResend}
+                  disabled={resendLoading}
+                  className="px-5 py-3 rounded-full border border-black/15 text-[13px] font-semibold hover:border-black transition-colors"
+                >
+                  {resendLoading ? "Envoi..." : "Renvoyer le devis"}
                 </button>
                 <Link
                   to="/"
