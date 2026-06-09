@@ -44,7 +44,7 @@ const Hero = () => {
             En ligne · {time}
           </div>
           <div className="hidden sm:block">Édition 026 — Hiver 2026</div>
-          <div className="hidden md:block">Normandie, FR</div>
+          <div className="hidden md:block">Île-de-France, FR</div>
         </div>
 
         {/* Big headline */}
