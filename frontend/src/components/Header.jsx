@@ -44,16 +44,25 @@ const Header = () => {
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                to={item.href}
-                className="relative px-4 py-2 text-[14px] font-medium text-[#0F0F0F]/75 hover:text-[#0F0F0F] transition-colors duration-200 group"
-              >
-                {item.label}
-                <span className="absolute left-4 right-4 -bottom-0.5 h-px bg-[#0F0F0F] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.href;
+              return (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className={`relative px-4 py-2 text-[14px] font-medium transition-colors duration-200 group ${
+                    isActive ? "text-[#0F0F0F]" : "text-[#0F0F0F]/60 hover:text-[#0F0F0F]"
+                  }`}
+                >
+                  {item.label}
+                  <span
+                    className={`absolute left-4 right-4 -bottom-0.5 h-px bg-[#0F0F0F] origin-left transition-transform duration-300 ${
+                      isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                    }`}
+                  />
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right actions */}

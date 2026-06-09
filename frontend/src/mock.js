@@ -166,9 +166,6 @@ export const stats = [
 ];
 
 export const navItems = [
-  { label: "Réalisations", href: "/shop" },
-  { label: "Montage Custom", href: "/custom" },
-  { label: "Services", href: "/services" },
-  { label: "Magazine", href: "/magazine" },
-  { label: "Setup", href: "/setup" }
+  { label: "Accueil", href: "/" },
+  { label: "Devis", href: "/devis" }
 ];

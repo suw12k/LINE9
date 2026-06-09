@@ -64,15 +64,15 @@ const Hero = () => {
             </h1>
 
             <div className="flex flex-wrap items-center gap-3 mt-10">
-              <Link
-                to="/shop"
+              <a
+                href="#shop"
                 className="group inline-flex items-center gap-3 bg-[#0F0F0F] text-white text-[14px] font-semibold pl-6 pr-2 py-2 rounded-full hover:bg-[#1a1a1a] transition-colors duration-200"
               >
                 Voir mes réalisations
                 <span className="w-10 h-10 rounded-full bg-[#C7F84E] flex items-center justify-center text-[#0F0F0F] transition-transform duration-300 group-hover:rotate-45">
                   <ArrowUpRight className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 </span>
-              </Link>
+              </a>
               <Link
                 to="/devis"
                 className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#0F0F0F] px-6 py-3 rounded-full border border-[#0F0F0F]/15 hover:border-[#0F0F0F] transition-colors duration-200"
@@ -112,10 +112,10 @@ const Hero = () => {
                   Assemblé et testé à la main en atelier.
                 </div>
                 <Link
-                  to="/shop"
+                  to="/devis"
                   className="text-[12px] font-semibold inline-flex items-center gap-1 bg-white/10 hover:bg-white/20 transition-colors px-3 py-2 rounded-full"
                 >
-                  Voir <ArrowRight className="w-3.5 h-3.5" />
+                  Devis <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>

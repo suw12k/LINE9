@@ -12,11 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/devis" element={<Devis />} />
-          <Route path="/shop" element={<Home />} />
-          <Route path="/custom" element={<Devis />} />
-          <Route path="/services" element={<Home />} />
-          <Route path="/magazine" element={<Home />} />
-          <Route path="/setup" element={<Home />} />
+          <Route path="*" element={<Home />} />
         </Routes>
       </BrowserRouter>
       <Toaster />
