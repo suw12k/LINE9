@@ -167,5 +167,6 @@ export const stats = [
 
 export const navItems = [
   { label: "Accueil", href: "/" },
+  { label: "Configs", href: "/configs" },
   { label: "Devis", href: "/devis" }
 ];

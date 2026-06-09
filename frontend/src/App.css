@@ -71,6 +71,14 @@ h1, h2, h3, h4, h5 {
   animation: testimonial-fade-anim 0.5s ease-out;
 }
 
+/* Hide Emergent badge */
+#emergent-badge {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Smooth scroll */
 html { scroll-behavior: smooth; }
 

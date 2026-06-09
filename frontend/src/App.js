@@ -3,6 +3,7 @@ import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Devis from "./pages/Devis";
+import Configs from "./pages/Configs";
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/configs" element={<Configs />} />
           <Route path="/devis" element={<Devis />} />
           <Route path="*" element={<Home />} />
         </Routes>
